@@ -9,59 +9,59 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-game = [[None, None, None], [None, None, None], [None, None, None]]
+#session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
  
 @app.route("/")
 def index():
     if "board" not in session:
-        session["board"] = game
+        session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
         session["turn"] = "X"
-    
-    session["board"] = game
-    session["turn"] = "X"
 
     return render_template("game.html", game=session["board"], turn=session["turn"])
  
 @app.route("/playx/<int:row>/<int:col>")
 def playx(row, col):
-    game[row][col] = "X"
+    session["board"][row][col] = "X"
     player = "X"
 
     session["turn"] = "O"
+
     status = False
-    if game[row][0] != None and game[row][0] == game[row][1] and game[row][0]== game[row][2]:
+    if session["board"][row][0] != None and session["board"][row][0] == session["board"][row][1] and session["board"][row][0]== session["board"][row][2]:
         status = True
-    elif game[0][col] != None and game[0][col]== game[1][col] and game[0][col]== game[2][col]:
+    elif session["board"][0][col] != None and session["board"][0][col]== session["board"][1][col] and session["board"][0][col]== session["board"][2][col]:
         status = True
-    elif game[0][0] != None and game[0][0] == game[1][1] and game[0][0] == game[2][2]:
+    elif session["board"][0][0] != None and session["board"][0][0] == session["board"][1][1] and session["board"][0][0] == session["board"][2][2]:
         status = True
 
     if status == True:
-        return render_template("win.html", game=game, turn=session["turn"], win=status, current=player)
+        return render_template("win.html", game=session["board"], turn=session["turn"], win=status, current=player)
 
-    return render_template("game.html", game=game, turn=session["turn"], win=status, current=player)
+    return render_template("game.html", game=session["board"], turn=session["turn"], win=status, current=player)
 
 @app.route("/playo/<int:row>/<int:col>")
 def playo(row, col):
-    game[row][col] = "O"
+    session["board"][row][col] = "O"
     player = "O"
 
     session["turn"] = "X"
 
     status = False
-    if game[row][0] != None and game[row][0] == game[row][1] and game[row][0]== game[row][2]:
+    if session["board"][row][0] != None and session["board"][row][0] == session["board"][row][1] and session["board"][row][0]== session["board"][row][2]:
         status = True
-    elif game[0][col] != None and game[0][col]== game[1][col] and game[0][col]== game[2][col]:
+    elif session["board"][0][col] != None and session["board"][0][col]== session["board"][1][col] and session["board"][0][col]== session["board"][2][col]:
         status = True
-    elif game[0][0] != None and game[0][0] == game[1][1] and game[0][0] == game[2][2]:
+    elif session["board"][0][0] != None and session["board"][0][0] == session["board"][1][1] and session["board"][0][0] == session["board"][2][2]:
         status = True
 
     if status == True:
-        return render_template("win.html", game=game, turn=session["turn"], win=status, current=player)
+        return render_template("win.html", game=session["board"], turn=session["turn"], win=status, current=player)
 
-    return render_template("game.html", game=game, turn=session["turn"],win=status,current=player)
+    return render_template("game.html", game=session["board"], turn=session["turn"],win=status,current=player)
 
 @app.route("/reset")
 def reset():
-    game = [[None, None, None], [None, None, None], [None, None, None]]
-    return redirect(url_for("index"))
+    session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
+    session["turn"] = "X"
+
+    return render_template("game.html", game=session["board"], turn=session["turn"])
