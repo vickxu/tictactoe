@@ -10,15 +10,16 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 game = [[None, None, None], [None, None, None], [None, None, None]]
-
  
 @app.route("/")
 def index():
     if "board" not in session:
-        game = [[None, None, None], [None, None, None], [None, None, None]]
         session["board"] = game
         session["turn"] = "X"
- 
+    
+    session["board"] = game
+    session["turn"] = "X"
+
     return render_template("game.html", game=session["board"], turn=session["turn"])
  
 @app.route("/playx/<int:row>/<int:col>")
@@ -62,4 +63,5 @@ def playo(row, col):
 
 @app.route("/reset")
 def reset():
+    game = [[None, None, None], [None, None, None], [None, None, None]]
     return redirect(url_for("index"))

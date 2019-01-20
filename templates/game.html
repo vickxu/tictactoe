@@ -37,8 +37,6 @@
                                     <a href="{{ url_for('playx', row=i, col=j,board=game) }}">Play {{ turn }} here.</a>
                                 {% elif turn == "O" %}
                                     <a href="{{ url_for('playo', row=i, col=j,board=game) }}">Play {{ turn }} here.</a>
-                                {% elif win %}
-                                    {{ game[i][j] }}
                                 {% endif %}
                             </td>
                         {% endfor %}
